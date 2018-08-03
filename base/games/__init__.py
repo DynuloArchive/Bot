@@ -65,7 +65,6 @@ class SimpleGames(bot.Extension):
         text = next(itertools.islice(lines.elements(), i, None))
         await message.channel.send(text)
 
-    @bot.role("active")
     @bot.command()
     async def joke(ctx, message):
         """Prints a joke"""
