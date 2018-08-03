@@ -69,8 +69,7 @@ class SimpleGames(bot.Extension):
     @bot.command()
     async def joke(ctx, message):
         """Prints a joke"""
-        joke = requests.get("https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_joke")
-        data = joke.json()
-        await message.channel.send(data["setup"])
+        joke = requests.get("https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_joke").json()
+        await message.channel.send(joke["setup"])
         await asyncio.sleep(4)
-        await message.channel.send(data["punchline"])
+        await message.channel.send(joke["punchline"])
