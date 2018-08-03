@@ -1,0 +1,6 @@
+.data
+.profiles
+ext-*
+logs/
+__pycache__
+*.pyc
