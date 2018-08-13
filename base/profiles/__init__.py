@@ -5,7 +5,7 @@ import bot
 class Profiles(bot.Extension):
     """Profiles for Disco"""
 
-    @bot.argument("[member+]", discord.Member, "author")
+    @bot.argument("member*", discord.Member, "author")
     @bot.command()
     async def avatar(ctx, message):
         """Prints out a users discord avatar"""
@@ -19,7 +19,7 @@ class Profiles(bot.Extension):
         embed.set_image(url=ctx.args.member.avatar_url)
         await message.channel.send(embed=embed)
 
-    @bot.argument("[member+]", discord.Member, "author")
+    @bot.argument("*member*", discord.Member, "author")
     @bot.command()
     async def card(ctx, message):
         """Display a card with information about a member"""

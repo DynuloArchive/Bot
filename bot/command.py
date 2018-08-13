@@ -62,9 +62,10 @@ class Command:
                 await self.func(ctx.safe(), ctx.message)
                 logger.debug("Running {}".format(self.name))
         except ArgumentException as e:
+            logger.error("Handling {}".format(str(e)))
             if str(e) == "Display Help":
                 embed = discord.Embed(
-                    title="{0._ctx.profile.prefix}{1} {0._usage}".format(e.data[0], self.name)
+                    title="{0._ctx.profile.prefix}{1} {2}".format(e.data[0], self.name, e.data[0].usage())
                 )
                 for arg in self.args:
                     if arg[2] is None:
@@ -76,17 +77,22 @@ class Command:
                     title="Command Not Found",
                     description="The command `{}` provided for `{}` was not found".format(e.data[2], e.data[1])
                 )
-                embed.set_footer(text="Usage: {0._ctx.profile.prefix}{1} {0._usage}".format(e.data[0], self.name))
+                embed.set_footer(text="Usage: {0._ctx.profile.prefix}{1} {2}".format(e.data[0], self.name, e.data[0].usage()))
             elif str(e) == "Not Enough Args":
                 embed = discord.Embed(
                     title="Missing {}".format(e.data[1]),
                     description="`{}` is a required field".format(e.data[1])
                 )
-                embed.set_footer(text="Usage: {0._ctx.profile.prefix}{1} {0._usage}".format(e.data[0], self.name))
+                embed.set_footer(text="Usage: {0._ctx.profile.prefix}{1} {2}".format(e.data[0], self.name, e.data[0].usage()))
             elif str(e) == "Member Not Found":
                 embed = discord.Embed(
                     title="Member Not Found",
                     description="The user `{}` was not found.".format(e.data[2])
+                )
+            elif str(e) == "Channel Not Found":
+                embed = discord.Embed(
+                    title="Channel Not Found",
+                    description="The channel `{}` was not found".format(e.data[2])
                 )
             elif str(e) == "Role Not Found":
                 embed = discord.Embed(
@@ -141,7 +147,7 @@ def role(role):
 def argument(name, argtype=str, default=None):
     """Decorator to define an argument for a command"""
     def decorator(func):
-        if len(func.args) != 0 and "+" in name:
+        if len(func.args) != 0 and ("+" in name or "*" in name):
             raise Exception("Unexpceted argument after multi-length argument")
         func.args.insert(0, [name, argtype, default])
         func.usage = " ".join([x[0] for x in func.args])

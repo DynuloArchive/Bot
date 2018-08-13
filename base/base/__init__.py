@@ -7,16 +7,40 @@ import logger
 class Info(bot.Extension):
     """Provides information about the Bot and loaded extensions"""
 
-    @bot.argument("[command]", bot.Command)
     @bot.command()
     async def info(ctx, message):
         """Displays info about the bot or a command"""
-        if ctx.args.command is None:
-            embed = discord.Embed()
-            embed.add_field(name="Profile", value=ctx.profile.name)
-            embed.add_field(name="Mode", value=ctx.profile.mode)
-            embed.set_author(name=ctx.user.name, icon_url=ctx.user.avatar_url)
-            await message.channel.send(embed=embed)
+        embed = discord.Embed()
+        embed.add_field(name="Profile", value=ctx.profile.name)
+        embed.add_field(name="Mode", value=ctx.profile.mode)
+        embed.set_author(name=ctx.user.name, icon_url=ctx.user.avatar_url)
+        await message.channel.send(embed=embed)
+
+class Help(bot.Extension):
+    """Helps people use the bot"""
+
+    @bot.argument("command*", bot.Command)
+    @bot.command()
+    async def help(ctx, message):
+        """Displays help information"""
+        if ctx.args.command == None:
+            m = "```makefile\n"
+            commands = []
+            for ext in ctx.bot.extensions:
+                commands += ext.commands
+            commands.sort()
+            for i in range(0, 6):
+                m += commands[i].name + ":\n    " + commands[i].help + "\n"
+            embed = discord.Embed(
+                title="Help",
+                description=m+"```",
+                color=ctx.profile.color
+            )
+            embed.set_footer(text="Help Page: 1")
+            mid = await message.channel.send(embed=embed)
+            await mid.add_reaction("\u2B05")
+            await mid.add_reaction("\u27A1")
+            await mid.add_reaction("❌")
         else:
             embed = discord.Embed(
                 title="{0.profile.prefix}{0.args.command.name} {0.args.command.usage}".format(ctx),
@@ -25,31 +49,6 @@ class Info(bot.Extension):
             )
             embed.set_footer(text=ctx.args.command.extension.fullname + "." + ctx.args.command.name)
             await message.channel.send(embed=embed)
-
-class Help(bot.Extension):
-    """Helps people use the bot"""
-
-    @bot.argument("[command]", bot.Command)
-    @bot.command()
-    async def help(ctx, message):
-        """Displays help information"""
-        m = "```makefile\n"
-        commands = []
-        for ext in ctx.bot.extensions:
-            commands += ext.commands
-        commands.sort()
-        for i in range(0, 6):
-            m += commands[i].name + ":\n    " + commands[i].help + "\n"
-        embed = discord.Embed(
-            title="Help",
-            description=m+"```",
-            color=ctx.profile.color
-        )
-        embed.set_footer(text="Help Page: 1")
-        mid = await message.channel.send(embed=embed)
-        await mid.add_reaction("\u2B05")
-        await mid.add_reaction("\u27A1")
-        await mid.add_reaction("❌")
 
     @bot.event("on_reaction_add")
     async def change_page(ctx, args):
@@ -79,7 +78,6 @@ class Help(bot.Extension):
                         page = 1
                     m = "```makefile\n"
                     for i in range(0 + (6 * (page - 1)),6 * (page)):
-                        print(i)
                         try:
                             m += commands[i].name + ":\n    " + commands[i].help + "\n"
                         except:
