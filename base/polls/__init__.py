@@ -5,8 +5,7 @@ import bot
 class Polls(bot.Extension):
     """Polls for Disco"""
 
-    @bot.role("active")
-    @bot.argument("(title)")
+    @bot.argument("[title]")
     @bot.argument("text+")
     @bot.command()
     async def poll(ctx, message):
@@ -18,6 +17,6 @@ class Polls(bot.Extension):
         )
         embed.set_footer(text="Created by: {}".format(message.author.display_name))
         msg = await message.channel.send(embed=embed)
+        await message.delete()
         await msg.add_reaction("👍")
         await msg.add_reaction("👎")
-        await message.delete()
