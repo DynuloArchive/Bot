@@ -57,8 +57,9 @@ class Extensions:
             try:
                 ext = importlib.import_module(extname)
                 logger.debug("  {}".format(extname))
-            except:
+            except Exception as e:
                 logger.error("Load Failed: {}".format(extname))
+                logger.error(str(e))
                 continue
             clsmembers = inspect.getmembers(sys.modules[extname], inspect.isclass)
             for c in clsmembers:
