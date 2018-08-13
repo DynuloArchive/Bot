@@ -19,7 +19,7 @@ class SimpleGames(bot.Extension):
             output = "It lands on tails"
         await message.channel.send(output)
 
-    @bot.argument("[sides+]", int, default=6)
+    @bot.argument("sides*", int, default=6)
     @bot.command()
     async def dice(ctx, message):
         """Roll a dice"""
@@ -52,7 +52,7 @@ class SimpleGames(bot.Extension):
             output += ", you win."
         await message.channel.send(output)
 
-    @bot.argument("question")
+    @bot.argument("question*")
     @bot.command()
     async def ball(ctx, message):
         """8-Baller"""
