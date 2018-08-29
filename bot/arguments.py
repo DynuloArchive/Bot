@@ -97,7 +97,7 @@ class Arguments:
         elif argtype == discord.Member:
             if value == "author":
                 return self._ctx.message.author
-            if value.startswith("<@"):
+            if isinstance(value, str) and value.startswith("<@"):
                 value = value[2:-1]
                 if value.startswith("!"):
                     value = value[1:]
