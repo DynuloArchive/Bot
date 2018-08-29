@@ -131,6 +131,8 @@ class Arguments:
             return role
         elif argtype == datetime.tzinfo:
             import pytz
+            if value is None:
+                return None
             if value in pytz.all_timezones:
                 return pytz.timezone(value)
             else:
