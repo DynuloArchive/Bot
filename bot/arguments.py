@@ -136,11 +136,13 @@ class Arguments:
             import pytz
             if value is None:
                 return None
+            if isinstance(value, list):
+                value = "_".join(value)
             if value in pytz.all_timezones:
                 return pytz.timezone(value)
             else:
                 for tz in pytz.all_timezones:
-                    if value.replace(" ", "_").lower() in tz.lower():
+                    if value.lower() in tz.lower():
                         return pytz.timezone(tz)
             raise ArgumentException("Timezone Not Found", [self, arg, value])
         elif argtype == int:
