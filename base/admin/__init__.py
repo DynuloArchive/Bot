@@ -1,8 +1,6 @@
-import bot
+"""Commands for admins"""
 import discord
-import math
-import os
-import logger
+import bot
 
 class Admin(bot.Extension):
     """Provides information about the Bot and loaded extensions"""
