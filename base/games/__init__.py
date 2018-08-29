@@ -52,7 +52,7 @@ class SimpleGames(bot.Extension):
             output += ", you win."
         await message.channel.send(output)
 
-    @bot.argument("question*")
+    @bot.argument("question+")
     @bot.command()
     async def ball(ctx, message):
         """8-Baller"""
