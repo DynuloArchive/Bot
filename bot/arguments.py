@@ -107,6 +107,9 @@ class Arguments:
             except ValueError:
                 value = value.lower()
                 member = discord.utils.find(lambda m: m.name.lower() == value or m.display_name.lower() == value, self._ctx.message.channel.guild.members)
+            except TypeError:
+                value = " ".join(value)
+                member = discord.utils.find(lambda m: m.name.lower() == value or m.display_name.lower() == value, self._ctx.message.channel.guild.members)
             if member is None:
                 raise ArgumentException("Member Not Found", [self, arg, value])
             return member
