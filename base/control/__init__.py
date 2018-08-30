@@ -28,7 +28,7 @@ class Control(bot.Extension):
         os.execl(sys.executable, sys.executable, *sys.argv)
         await ctx.bot.logout()
 
-    @bot.event("on_ready"):
+    @bot.event("on_ready")
     async def ready(ctx, _):
         if os.path.isfile("/tmp/restart-bot"):
             with open("/tmp/restart-bot") as f:
