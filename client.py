@@ -26,6 +26,8 @@ class Client(discord.Client):
             for task in ext.tasks:
                 await task.start(self, ext)
 
+        await self.fire_event(None, "on_ready")
+
     async def execute(self, message, profile=False):
         if message.author.id == self.user.id:
             return
