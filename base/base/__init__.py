@@ -30,7 +30,10 @@ class Help(bot.Extension):
                 commands += ext.commands
             commands.sort()
             for i in range(0, 6):
-                m += commands[i].name + ":\n    " + commands[i].help + "\n"
+                try:
+                    m += commands[i].name + ":\n    " + commands[i].help + "\n"
+                except TypeError:
+                    m += commands[i].name + "\n\n"
             embed = discord.Embed(
                 title="Help",
                 description=m+"```",
