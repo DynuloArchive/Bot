@@ -1,6 +1,7 @@
 """Commands for admins"""
 import discord
 import bot
+import logger
 
 class Admin(bot.Extension):
     """Provides information about the Bot and loaded extensions"""
@@ -34,3 +35,18 @@ class Admin(bot.Extension):
         perms.send_messages = None
         await ctx.args.channel.set_permissions(everyone, overwrite=perms)
         await message.add_reaction("🔓")
+
+    @bot.role("moderator")
+    @bot.argument("member", discord.Member)
+    @bot.argument("command", bot.Command)
+    @bot.argument("arguments+")
+    @bot.command()
+    async def runas(ctx, message):
+        """Run a command as a member"""
+        if bot.in_role_list(message.author, ctx.args.command.roles):
+            message.author = ctx.args.member
+            message.content = ctx.bot.profile.prefix + ctx.args.command.name + " " + ctx.args.arguments
+            logger.debug(f"Running {message.content}")
+            await ctx.bot.execute(message)
+        else:
+            await message.channel.send("You are not allowed to run that command.")
