@@ -50,17 +50,18 @@ class Command:
             ctx.args = Arguments(ctx, args, self.args)
             if self.dev:
                 if ctx.profile.mode == "dev":
-                    logger.debug("Running {}".format(self.name))
+                    logger.debug(f"Running {self.name}")
                     await self.func(ctx.safe(), ctx.message)
                 await ctx.message.channel.send("That command is only available in dev mode.")
             elif self.live:
                 if ctx.profile.mode == "live":
-                    logger.debug("Running {}".format(self.name))
+                    logger.debug(f"Running {self.name}")
                     await self.func(ctx.safe(), ctx.message)
                 await ctx.message.channel.send("That command is only available in live mode.")
             else:
+                logger.debug(f"Running {self.name}")
                 await self.func(ctx.safe(), ctx.message)
-                logger.debug("Running {}".format(self.name))
+                logger.debug(f"Exited {self.name}")
         except ArgumentException as e:
             logger.error("Handling {}".format(str(e)))
             if str(e) == "Display Help":
