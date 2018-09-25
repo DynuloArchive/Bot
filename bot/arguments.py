@@ -88,6 +88,8 @@ class Arguments:
         if argtype == bot.Command:
             if value == None:
                 return None
+            if value.startswith(self._ctx.bot.profile.prefix):
+                value = value[len(self._ctx.bot.profile.prefix):]
             for ext in self._ctx.bot.extensions:
                 for command in ext.commands:
                     if command.name == value:
@@ -147,10 +149,10 @@ class Arguments:
             raise ArgumentException("Timezone Not Found", [self, arg, value])
         elif argtype == int:
             try:
-                value = int(value)
+                value = int(str(value).replace(",","").replace(" ",""))
             except ValueError:
                 try:
-                    value = self._txt2int(value)
+                    value = self._txt2int(" ".join(value))
                 except:
                     raise ArgumentException("TypeError", [self, arg, value, "number"])
             except TypeError:
@@ -171,6 +173,7 @@ class Arguments:
 
     def _txt2int(self, textnum):
         """Converts text into an int: "ten" -> 10"""
+        logger.debug(f"Converting {textnum} to int")
         numwords = {}
         units = [
             "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",

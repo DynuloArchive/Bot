@@ -16,7 +16,7 @@ class Control(bot.Extension):
         await ctx.bot.logout()
 
     @bot.command()
-    async def update(ctx, message):
+    async def restart(ctx, message):
         """Update the bot from Git and restart"""
         subprocess.getoutput("git pull")
         mid = await message.channel.send(embed=discord.Embed(

@@ -31,39 +31,20 @@ class SimpleGames(bot.Extension):
     @bot.command()
     async def rps(ctx, message):
         """Rock, Paper, Scissors Game"""
-        valid = ["rock", "paper", "scissors"]
-        if not ctx.args.choice.lower() in valid:
+        valid = ["Rock", "Paper", "Scissors"]
+        if not ctx.args.choice.title() in valid:
             await message.channel.send("That is not a valid choice")
             return
         botchoice = random.randint(0, 2)
-        if botchoice == 0:
-            output = "Rock"
-        if botchoice == 1:
-            output = "Paper"
-        if botchoice == 2:
-            output = "Scissors"
+        output = valid[botchoice]
         player = valid.index(ctx.args.choice.lower())
         if player == botchoice:
             output += ", it's a tie."
-
         elif player == botchoice - 1 or player == botchoice + 2:
             output += ", you lose."
         elif player == botchoice + 1 or player == botchoice - 2:
             output += ", you win."
         await message.channel.send(output)
-
-    @bot.argument("question+")
-    @bot.command()
-    async def ball(ctx, message):
-        """8-Baller"""
-        lines = {}
-        for line in open("./extensions/games/8ball.txt").read().splitlines():
-            value, text = line.split(":", 1)
-            lines[text] = int(value)
-        lines = collections.Counter(lines)
-        i = random.randrange(sum(lines.values()))
-        text = next(itertools.islice(lines.elements(), i, None))
-        await message.channel.send(text)
 
     @bot.command()
     async def joke(ctx, message):
