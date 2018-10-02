@@ -55,7 +55,7 @@ class SimpleGames(bot.Extension):
         await asyncio.sleep(4)
         await message.channel.send(joke["punchline"])
 
-    @bot.argument("format")
+    @bot.argument("meme")
     @bot.argument("top")
     @bot.argument("bottom")
     @bot.command()
@@ -71,17 +71,17 @@ class SimpleGames(bot.Extension):
             "/": "~s",
             "\"": "''"
         }
-        format = ctx.args.format
+        meme = ctx.args.meme
         toptext = ctx.args.top
         bottomtext = ctx.args.bottom
         for a, b in escapes.items():
-            format = format.replace(a,b)
+            meme = meme.replace(a,b)
             toptext = toptext.replace(a,b)
             bottomtext = bottomtext.replace(a,b)
         embed = discord.Embed(
             color=discord.Color.from_rgb(r=255, g=255, b=0)
         )
-        embed.set_image(url=f"https://memegen.link/{format}/{toptext}/{bottomtext}.jpg")
+        embed.set_image(url=f"https://memegen.link/{meme}/{toptext}/{bottomtext}.jpg")
         embed.set_footer(text=f"Created by: {message.author.display_name}")
         await message.delete()
         await message.channel.send(embed=embed)
