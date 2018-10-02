@@ -53,3 +53,28 @@ class SimpleGames(bot.Extension):
         await message.channel.send(joke["setup"])
         await asyncio.sleep(4)
         await message.channel.send(joke["punchline"])
+
+    @bot.argument("format")
+    @bot.argument("top")
+    @bot.argument("bottom")
+    @bot.command()
+    async def meme(ctx, message):
+        """Prints a formattable meme"""
+        escapes = {
+            "-": "--",
+            "_": "__",
+            " ": "_",
+            "?": "~q",
+            "%": "~p",
+            "#": "~h",
+            "/": "~s",
+            "\"": "''"
+        }
+        format = ctx.args.format
+        toptext = ctx.args.top
+        bottomtext = ctx.args.bottom
+        for a, b in escapes.items():
+            format = format.replace(a,b)
+            toptext = toptext.replace(a,b)
+            bottomtext = bottomtext.replace(a,b)
+        await message.channel.send(f"https://memegen.link/{format}/{toptext}/{bottomtext}.jpg")
