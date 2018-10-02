@@ -1,6 +1,4 @@
 """Games for Disco"""
-import itertools
-import collections
 import random
 import asyncio
 import requests
