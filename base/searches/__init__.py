@@ -33,25 +33,24 @@ class Searches(bot.Extension):
         except IndexError:
             await message.channel.send("No definiton was found 😢")
 
-    @bot.arugment("query+")
+    @bot.argument("query+")
     @bot.command()
     async def define(ctx, message):
         """Get the definition of a word"""
         dictionary = PyDictionary()
-        async with message.channel.typing():
-            definition = dictionary.meaning(ctx.args.query)
-        await message.channel.send(definition)
-
-    @bot.arugment("query+")
-    @bot.command()
-    async def antonym(ctx, message):
-        """Get the antonym of a word"""
-        dictionary = PyDictionary()
-        pass
-        
-    @bot.arugment("query+")
-    @bot.command()
-    async def synonym(ctx, message):
-        """Get the synonym of a word"""
-        dictionary = PyDictionary()
-        pass
+        embeds = []
+        try:
+            async with message.channel.typing():
+                definition = dictionary.meaning(ctx.args.query)
+                for usage, defs in definition.items():
+                    query = ctx.args.query.title()
+                    usage = usage.lower()
+                    embed = discord.Embed(
+                        title=f"{query}: {usage}",
+                        description=" -  " + ("\n -  ".join(defs[0:min(3,len(defs))]))
+                    )
+                    embeds.append(embed)
+            for e in embeds:
+                await message.channel.send(embed=e)
+        except AttributeError:
+            await message.channel.send("No definition was found 😢")
