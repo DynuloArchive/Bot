@@ -4,6 +4,7 @@ import collections
 import random
 import asyncio
 import requests
+import discord
 import bot
 
 class SimpleGames(bot.Extension):
@@ -77,4 +78,10 @@ class SimpleGames(bot.Extension):
             format = format.replace(a,b)
             toptext = toptext.replace(a,b)
             bottomtext = bottomtext.replace(a,b)
-        await message.channel.send(f"https://memegen.link/{format}/{toptext}/{bottomtext}.jpg")
+        embed = discord.Embed(
+            color=discord.Color.from_rgb(r=255, g=255, b=0)
+        )
+        embed.set_image(url=f"https://memegen.link/{format}/{toptext}/{bottomtext}.jpg")
+        embed.set_footer(text=f"Created by: {message.author.display_name}")
+        await message.delete()
+        await message.channel.send(embed=embed)
