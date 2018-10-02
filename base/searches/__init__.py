@@ -3,6 +3,7 @@ import discord
 from google import google
 import bot
 import urbandictionary as ud
+from PyDictionary import PyDictionary
 
 class Searches(bot.Extension):
     """Search Engines"""
@@ -31,3 +32,26 @@ class Searches(bot.Extension):
             await message.channel.send(defs.definition)
         except IndexError:
             await message.channel.send("No definiton was found 😢")
+
+    @bot.arugment("query+")
+    @bot.command()
+    async def define(ctx, message):
+        """Get the definition of a word"""
+        dictionary = PyDictionary()
+        async with message.channel.typing():
+            definition = dictionary.meaning(ctx.args.query)
+        await message.channel.send(definition)
+
+    @bot.arugment("query+")
+    @bot.command()
+    async def antonym(ctx, message):
+        """Get the antonym of a word"""
+        dictionary = PyDictionary()
+        pass
+        
+    @bot.arugment("query+")
+    @bot.command()
+    async def synonym(ctx, message):
+        """Get the synonym of a word"""
+        dictionary = PyDictionary()
+        pass
