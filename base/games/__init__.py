@@ -4,6 +4,7 @@ import collections
 import random
 import asyncio
 import requests
+import discord
 import bot
 
 class SimpleGames(bot.Extension):
@@ -53,3 +54,34 @@ class SimpleGames(bot.Extension):
         await message.channel.send(joke["setup"])
         await asyncio.sleep(4)
         await message.channel.send(joke["punchline"])
+
+    @bot.argument("meme")
+    @bot.argument("top")
+    @bot.argument("bottom")
+    @bot.command()
+    async def meme(ctx, message):
+        """Prints a formattable meme"""
+        escapes = {
+            "-": "--",
+            "_": "__",
+            " ": "_",
+            "?": "~q",
+            "%": "~p",
+            "#": "~h",
+            "/": "~s",
+            "\"": "''"
+        }
+        meme = ctx.args.meme
+        toptext = ctx.args.top
+        bottomtext = ctx.args.bottom
+        for a, b in escapes.items():
+            meme = meme.replace(a,b)
+            toptext = toptext.replace(a,b)
+            bottomtext = bottomtext.replace(a,b)
+        embed = discord.Embed(
+            color=discord.Color.from_rgb(r=255, g=255, b=0)
+        )
+        embed.set_image(url=f"https://memegen.link/{meme}/{toptext}/{bottomtext}.jpg")
+        embed.set_footer(text=f"Created by: {message.author.display_name}")
+        await message.delete()
+        await message.channel.send(embed=embed)
