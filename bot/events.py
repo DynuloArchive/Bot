@@ -1,5 +1,7 @@
 import inspect
 
+import logger
+
 class EventHandler:
     """Handles Discord Events"""
     def __init__(self, name, callback, **kwargs):
@@ -17,6 +19,7 @@ class EventHandler:
 
     async def run(self, ctx):
         """Fires the function"""
+        logger.debug(f"Firing {self.event} for {self.name}")
         await self.func(ctx.safe(), ctx.message)
 
 def event(event, **attrs):
