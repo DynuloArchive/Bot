@@ -1,1 +1,2 @@
 http://github.com/abenassi/Google-Search-API/archive/master.zip
+https://github.com/bocong/urbandictionary-py/archive/master.zip
