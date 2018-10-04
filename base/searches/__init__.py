@@ -4,6 +4,7 @@ from google import google
 import bot
 import urbandictionary as ud
 from PyDictionary import PyDictionary
+import wikipediaapi
 
 class Searches(bot.Extension):
     """Search Engines"""
@@ -54,3 +55,27 @@ class Searches(bot.Extension):
                 await message.channel.send(embed=e)
         except AttributeError:
             await message.channel.send("No definition was found 😢")
+
+    @bot.argument("query+")
+    @bot.command()
+    async def wiki(ctx, message):
+        """Search for stuff on Wikipedia"""
+        async with message.channel.typing():
+            wiki = wikipediaapi.Wikipedia('en')
+            page = wiki.page(ctx.args.query.replace(" ","_"))
+            if page.exists():
+                if "may refer to:" in page.summary or page.summary.strip() == "":
+                    embed = discord.Embed(
+                        description=page.text[0:min(len(page.text), 2000)]
+                    )
+                else:
+                    embed = discord.Embed(
+                        title=page.title,
+                        url=page.fullurl,
+                        description=page.summary[0:min(len(page.summary), 500)]+"..."
+                    )
+            else:
+                embed = discord.Embed(
+                    description="No entry was found 😢"
+                )
+        await message.channel.send(embed=embed)
