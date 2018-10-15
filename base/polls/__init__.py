@@ -48,6 +48,7 @@ class Polls(bot.Extension):
         ballots = {}
         spoiled = []
         msg = await message.channel.get_message(int(ctx.args.message))
+        await message.add_reaction("✅")
         async for option in message.channel.history(after=msg, limit=5):
             def check(emoji,message):
                 for r in message.reactions:
@@ -62,11 +63,15 @@ class Polls(bot.Extension):
                             continue
                         if user in ballots:
                             if reaction.emoji in ballots[user]:
+                                logger.error(f"Spoiled ballet from {user.display_name}")
                                 spoiled.append(user)
                             else:
+                                logger.debug(f"User {user.display_name} used vote {reaction.emoji}")
                                 ballots[user][reaction.emoji] = option.id
                         else:
+                            logger.debug(f"User {user.display_name} used vote {reaction.emoji}")
                             ballots[user] = {reaction.emoji: option.id}
+        logger.debug(ballots)
 
         eliminated = []
         solved = False
@@ -104,5 +109,5 @@ class Polls(bot.Extension):
             if elim != None:
                 eliminated.append(elim)
             else:
-                await message.channel.send("Inconclusive /shrug")
+                await message.channel.send("Inconclusive 🙅")
                 solved = True

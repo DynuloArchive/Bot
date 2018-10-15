@@ -24,6 +24,8 @@ class Arguments:
 
         self._parser = argparse.ArgumentParser(description="Placeholder Text")
 
+        logger.debug(args)
+
         for arg in self._args:
             nargs = ""
             argname = arg[0]
