@@ -36,6 +36,21 @@ class Admin(bot.Extension):
         await ctx.args.channel.set_permissions(everyone, overwrite=perms)
         await message.add_reaction("🔓")
 
+    @bot.argument("count", int, 20)
+    @bot.command()
+    async def clear(ctx, message):
+        """Clears the past n number of messages (Default: 20)"""
+        messages = message.channel.history(limit=ctx.args.count + 1)
+        await message.add_reaction(":eraser:495153237431943170")
+        async for log in messages:
+            if not log.pinned:
+                try:
+                    if log.id != message.id:
+                        await log.delete()
+                except discord.errors.NotFound:
+                    logger.error("Failed to delete a message during clear.")
+        await message.delete()
+
     @bot.role("moderator")
     @bot.argument("member", discord.Member)
     @bot.argument("command", bot.Command)
