@@ -36,6 +36,7 @@ class Admin(bot.Extension):
         await ctx.args.channel.set_permissions(everyone, overwrite=perms)
         await message.add_reaction("🔓")
 
+    @bot.role("manager")
     @bot.argument("count", int, 20)
     @bot.command()
     async def clear(ctx, message):
